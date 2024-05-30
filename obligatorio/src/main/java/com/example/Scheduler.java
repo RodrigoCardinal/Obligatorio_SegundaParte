@@ -1,6 +1,13 @@
 package com.example;
 
+import java.util.LinkedList;
+
 public class Scheduler implements IScheduler{
+
+    Process runningProcess;
+    LinkedList<Process> processesList;
+    //LinkedList<Resource> resourcesList;
+    String schedullingPolicy;
 
     @Override
     public void Start() {
@@ -15,9 +22,25 @@ public class Scheduler implements IScheduler{
     }
 
     @Override
+    public void DispatchNext()
+    {   
+        switch(schedullingPolicy)
+        {
+            case "RR":
+                RoundRobinDispatch();
+                break;
+            case "FIFO":
+                FIFODispatch();
+                break;
+            default:
+                System.out.println("Invalid Schedulling Policy");
+        }
+        
+    }
+
+    @Override
     public void AddProcess(Process proc) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'AddProcess'");
+        processesList.add(proc);
     }
 
     @Override
@@ -52,4 +75,14 @@ public class Scheduler implements IScheduler{
     }
     */
     
+    public void FIFODispatch()
+    {
+        Process next = processesList.getFirst();
+    }
+
+    public void RoundRobinDispatch()
+    {
+
+    }
+
 }
