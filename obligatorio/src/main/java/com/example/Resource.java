@@ -6,7 +6,6 @@ public class Resource {
     boolean isAvailable;
     Process processOwner;
 
-    //setters and getters   
     public int getId() {
         return Id;
     }
@@ -25,8 +24,7 @@ public class Resource {
     public void setProcessOwner(Process processOwner) {
         this.processOwner = processOwner;
     }
-
-
-
     
+
 }
+
