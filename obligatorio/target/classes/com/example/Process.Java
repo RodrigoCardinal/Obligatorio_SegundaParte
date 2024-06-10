@@ -1,26 +1,23 @@
 package com.example;
 
-public class Proceso 
-{
-    private String nombre;
-    private int timer;
-    private int contexto;
-    private boolean recursoHabilitado;
+import java.util.LinkedList;
 
-    public Proceso(String nombre, int timer, int contexto, boolean recursoHabilitado){   
-        this.nombre = nombre;
-        this.timer = timer;
-        this.contexto = contexto;
-        this.recursoHabilitado = recursoHabilitado;
+public class Process 
+{
+    private String name;
+    private int timeRequired;
+    private int context;
+    private LinkedList<Resource> resAvailables;
+
+    public Process(String name, int timeRequired, int initialContext){   
+        this.name = name;
+        this.timeRequired = timeRequired;
+        this.context = initialContext;
+        this.resAvailables = new LinkedList<>();
     }
 
     public void Run(){
-        if(recursoHabilitado){
-            System.out.println("Se esta ejecutando el proceso " + this.getNombre() + ".");
-            timer++;
-        }else{
-            System.out.println("No se pudo ejectuar el proceso " + this.getNombre() + ".");
-        }
+        System.out.println("Se está ejecutando el proceso: " + name);
     }
 
     public void Stop(){

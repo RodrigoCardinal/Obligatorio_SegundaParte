@@ -6,8 +6,16 @@ public class Scheduler implements IScheduler{
 
     Process runningProcess;
     LinkedList<Process> processesList;
-    //LinkedList<Resource> resourcesList;
+    LinkedList<Resource> resourcesList;
     String schedullingPolicy;
+
+    public Scheduler(String schedullingPolicy)
+    {
+        this.runningProcess = null;
+        this.processesList = new LinkedList<>();
+        this.resourcesList = new LinkedList<>();
+        this.schedullingPolicy = schedullingPolicy;
+    }
 
     @Override
     public void Start() {
