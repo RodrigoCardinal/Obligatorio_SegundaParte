@@ -6,8 +6,11 @@ package com.example;
  */
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws InterruptedException
     {
-        System.out.println( "Hello World!" );
+        Process proc1 = new Process("Mortal Kombat X", 12, 0);
+        Scheduler prueba = new Scheduler("RR", 5);
+        prueba.AddProcess(proc1);
+        prueba.Start();
     }
 }

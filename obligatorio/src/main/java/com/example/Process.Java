@@ -1,57 +1,65 @@
 package com.example;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Process 
 {
     private String name;
-    private int timeRequired;
+    private long timeRequired;
     private int context;
     private LinkedList<Resource> resAvailables;
+    private Status status;
+    
+    private enum Status
+    {
+        READY,
+        RUNNING,
+        BLOCKED
+    }
 
-    public Process(String name, int timeRequired, int initialContext){   
+    public Process(String name, long timeRequired, int initialContext){   
         this.name = name;
         this.timeRequired = timeRequired;
         this.context = initialContext;
         this.resAvailables = new LinkedList<>();
+        this.status = Status.READY;
     }
 
-    public void Run(){
-        System.out.println("Se está ejecutando el proceso: " + name);
-    }
-
-    public void Stop(){
-        System.out.println("El proceso " + this.getNombre() + " se a detenido.");
-        timer=0;
-        this.setRecursoHabilitado(false);
-    }
-
-    public void saveContext(){
-        System.out.println("Guardando el contexto del proceso " + this.getNombre() + "." );
-        contexto = timer;
-    }
-
-    public void loadContext(){
-        System.out.println("El contexto del proceso" + this.getNombre() + " es " + this.getContexto());
-    }
-
-    public String getNombre(){
-        return this.nombre;
+    public String getName(){
+        return this.name;
     }
 
     public int getTimer(){
         return this.timer;
     }
 
-    public int getContexto(){
-        return this.contexto;
+    public int getContext(){
+        return this.context;
     }
 
-    public boolean getRecursoHabilitado(){
-        return this.recursoHabilitado;
+    public long getTimeRequired()
+    {
+        return this.timeRequired;
     }
 
-    public boolean setRecursoHabilitado(boolean recurso){
-        return this.recursoHabilitado = recurso;
+    public void Run(long seconds) throws InterruptedException{
+        Random random = new Random();
+        status = Status.RUNNING;
+        System.out.println("Se está ejecutando el proceso: " + name + ", su contexto actual es: " + Integer.toString(context) + " y le faltan aproximadamente " + timeRequired + " segundos para terminar su ejecución.");
+        Wait(seconds);
+        context = random.nextInt(100);
+        timeRequired = timeRequired - seconds < 0 ? 0 : timeRequired - seconds;
+        System.out.println("Terminó la ejecución de: " + name + ", su contexto actual es: " + Integer.toString(context) + " y ahora le faltan aproximadamente " + timeRequired + " segundos para terminar su ejecución.");
+        status = Status.READY;
+    }
+
+    public void Stop(){
+        System.out.println("El proceso " + this.getNombre() + " se a detenido.");
+    }
+
+    public void Wait(long seconds) throws InterruptedException
+    {
+        Thread.sleep(seconds*1000);
     }
 }

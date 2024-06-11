@@ -3,30 +3,19 @@ package com.example;
 public class Resource {
     private int Id;
     private String name;
-    boolean isAvailable;
-    Process processOwner;
-
-    //setters and getters   
+    Process owner;
+   
     public int getId() {
         return Id;
     }
     public String getName() {
         return name;
     }
-    public boolean isAvailable() {
-        return isAvailable;
+    public Process getOwner() {
+        return owner;
     }
-    public void setIsAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
-    public Process getProcessOwner() {
-        return processOwner;
-    }
-    public void setProcessOwner(Process processOwner) {
+    public void setOwner(Process processOwner) {
         this.processOwner = processOwner;
     }
-
-
-
     
 }
