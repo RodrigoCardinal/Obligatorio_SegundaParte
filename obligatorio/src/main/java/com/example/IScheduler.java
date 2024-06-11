@@ -10,8 +10,8 @@ public interface IScheduler {
     public void SuspendProcess(Process proc);
     public void ResumeProcess(Process proc);
     public void KillProcess(Process proc);
-    //public void GiveResource(Resource res);
-    //public void TakeResource(Resource res);
+    public void GiveResource(Resource res);
+    public void TakeResource(Resource res);
 
 
 }

@@ -14,8 +14,8 @@ public class Resource {
     public Process getOwner() {
         return owner;
     }
-    public void setOwner(Process processOwner) {
-        this.processOwner = processOwner;
+    public void setOwner(Process owner) {
+        this.owner = owner;
     }
     
 }

@@ -30,10 +30,6 @@ public class Process
         return this.name;
     }
 
-    public int getTimer(){
-        return this.timer;
-    }
-
     public int getContext(){
         return this.context;
     }
@@ -55,7 +51,7 @@ public class Process
     }
 
     public void Stop(){
-        System.out.println("El proceso " + this.getNombre() + " se a detenido.");
+        System.out.println("El proceso " + this.getName() + " se a detenido.");
     }
 
     public void Wait(long seconds) throws InterruptedException
