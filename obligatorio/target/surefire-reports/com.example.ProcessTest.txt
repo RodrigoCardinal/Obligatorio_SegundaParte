@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.example.ProcessTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.042 s <<< FAILURE! - in com.example.ProcessTest
+testRun(com.example.ProcessTest)  Time elapsed: 0.009 s  <<< FAILURE!
+java.lang.AssertionError: expected:<FINISHED> but was:<BLOCKED>
+	at com.example.ProcessTest.testRun(ProcessTest.java:49)
+

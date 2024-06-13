@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.example.SchedulerTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.053 s <<< FAILURE! - in com.example.SchedulerTest
+testDispatchNext(com.example.SchedulerTest)  Time elapsed: 0.008 s  <<< FAILURE!
+java.lang.AssertionError: expected:<com.example.Process@4590c9c3> but was:<null>
+	at com.example.SchedulerTest.testDispatchNext(SchedulerTest.java:43)
+
