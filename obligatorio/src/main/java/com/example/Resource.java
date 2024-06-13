@@ -1,12 +1,19 @@
 package com.example;
 
 public class Resource {
-    private int Id;
+    private int ID;
     private String name;
     Process owner;
+
+    public Resource(int ID, String name)
+    {
+        this.ID = ID;
+        this.name = name;
+        this.owner = null;
+    }
    
-    public int getId() {
-        return Id;
+    public int getID() {
+        return ID;
     }
     public String getName() {
         return name;
