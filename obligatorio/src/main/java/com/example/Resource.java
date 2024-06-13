@@ -24,5 +24,5 @@ public class Resource {
     public void setOwner(Process owner) {
         this.owner = owner;
     }
-    
+
 }

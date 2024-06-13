@@ -24,7 +24,7 @@ public class App
         Process proc1 = new Process("Mortal Kombat X", 12, 0, resMK);
         Process proc2 = new Process("Angry Birds", 6, 0, resAngryBirds);
         
-        Scheduler prueba = new Scheduler("FIFO", 5);
+        Scheduler prueba = new Scheduler("RR", 1);
         prueba.AddProcess(proc1);
         prueba.AddProcess(proc2);
         prueba.addResource(cd);
@@ -33,5 +33,3 @@ public class App
         prueba.Start();
     }
 }
-
-

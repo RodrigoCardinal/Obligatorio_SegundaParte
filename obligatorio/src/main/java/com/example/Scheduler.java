@@ -35,6 +35,10 @@ public class Scheduler implements IScheduler{
         //Búcle Principal del Scheduler
         while(isActive)
         {
+
+            //Intenta dar recursos a los procesos bloqueados
+            checkBlockedProcesses();
+
             //Comprobar si hay procesos listos
             for (Process process : processesList) {
                 if (process.getStatus() == Status.READY)
@@ -54,8 +58,7 @@ public class Scheduler implements IScheduler{
             DispatchNext();
 
 
-            //Intenta dar recursos a los procesos bloqueados
-            checkBlockedProcesses();
+            
 
             
             //Muestra el estado actual del scheduler
@@ -162,7 +165,7 @@ public class Scheduler implements IScheduler{
             default:
                 System.out.println("Política de Scheduling Inválida");
                 return false;
-        } 
+        }
     }
 
     public void RoundRobinDispatch() throws InterruptedException
@@ -215,8 +218,6 @@ public class Scheduler implements IScheduler{
             AddProcess(next);
         } 
     }
-
-
 
     @Override
     public void AddProcess(Process proc) {
