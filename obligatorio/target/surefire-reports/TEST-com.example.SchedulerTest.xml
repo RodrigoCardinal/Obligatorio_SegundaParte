@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.example.SchedulerTest" time="0.053" tests="4" errors="0" skipped="0" failures="1">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.example.SchedulerTest" time="15.054" tests="4" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -16,7 +16,7 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Users\nanos\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.10.7-hotspot\bin"/>
-    <property name="sun.java.command" value="C:\Users\nanos\AppData\Local\Temp\surefire12075903565599139103\surefirebooter15542522341317084320.jar C:\Users\nanos\AppData\Local\Temp\surefire12075903565599139103 2024-06-13T09-06-06_806-jvmRun1 surefire7136863297656842279tmp surefire_02064965914593384547tmp"/>
+    <property name="sun.java.command" value="C:\Users\nanos\AppData\Local\Temp\surefire1228981193233362888\surefirebooter942475339643544110.jar C:\Users\nanos\AppData\Local\Temp\surefire1228981193233362888 2024-06-13T09-54-19_846-jvmRun1 surefire2712295574264852697tmp surefire_09119923543063893784tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="test" value="com.example.SchedulerTest"/>
     <property name="surefire.test.class.path" value="C:\Users\nanos\Desktop\Sistemas Operativos\SO Obligatorio\Obligatorio_SegundaParte\obligatorio\target\test-classes;C:\Users\nanos\Desktop\Sistemas Operativos\SO Obligatorio\Obligatorio_SegundaParte\obligatorio\target\classes;C:\Users\nanos\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\nanos\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
@@ -32,7 +32,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\nanos\AppData\Local\Temp\surefire12075903565599139103\surefirebooter15542522341317084320.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\nanos\AppData\Local\Temp\surefire1228981193233362888\surefirebooter942475339643544110.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.10+7"/>
@@ -61,14 +61,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testAddResource" classname="com.example.SchedulerTest" time="0.004"/>
-  <testcase name="testSchedulerCreation" classname="com.example.SchedulerTest" time="0"/>
-  <testcase name="testDispatchNext" classname="com.example.SchedulerTest" time="0.008">
-    <failure message="expected:&lt;com.example.Process@4590c9c3&gt; but was:&lt;null&gt;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: expected:<com.example.Process@4590c9c3> but was:<null>
-	at com.example.SchedulerTest.testDispatchNext(SchedulerTest.java:43)
-]]></failure>
-    <system-out><![CDATA[Se bloqueo el proceso Test Process porque le faltaban los siguientes recursos: Resource1, 
-]]></system-out>
-  </testcase>
+  <testcase name="testAddResource" classname="com.example.SchedulerTest" time="0.003"/>
+  <testcase name="testStartScheduler" classname="com.example.SchedulerTest" time="15.015"/>
+  <testcase name="testSchedulerCreation" classname="com.example.SchedulerTest" time="0.002"/>
   <testcase name="testAddProcess" classname="com.example.SchedulerTest" time="0"/>
 </testsuite>

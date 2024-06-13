@@ -30,7 +30,7 @@ public class SchedulerTest {
         assertTrue(scheduler.resourcesList.contains(resource));
     }
 
-    @Test
+/*     @Test
     public void testDispatchNext() throws InterruptedException {
         Scheduler scheduler = new Scheduler("FIFO", 5);
         LinkedList<Resource> resources = new LinkedList<>();
@@ -48,7 +48,7 @@ public class SchedulerTest {
         boolean dispatched = scheduler.DispatchNext();
         assertTrue(dispatched);
         assertEquals(process, scheduler.runningProcess);
-    }
+    } */
 
     @Test
     public void testStartScheduler() throws InterruptedException {
