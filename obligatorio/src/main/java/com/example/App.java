@@ -139,7 +139,7 @@ public class App {
                 Process process = new Process(name, timeRequired, initialContext, resources);
                 processListModel.addElement(process);
                 if (scheduler != null) {
-                    scheduler.AddProcess(process);
+                    scheduler.addProcess(process);
                 }
             }
         });
@@ -157,7 +157,7 @@ public class App {
                 }
                 // Añadir los procesos existentes al scheduler
                 for (int i = 0; i < processListModel.size(); i++) {
-                    scheduler.AddProcess(processListModel.get(i));
+                    scheduler.addProcess(processListModel.get(i));
                 }
                 JOptionPane.showMessageDialog(frame, "Scheduler Configured!");
             }
@@ -169,7 +169,7 @@ public class App {
             public void actionPerformed(ActionEvent e) {
                 if (scheduler != null) {
                     try {
-                        scheduler.Start();
+                        scheduler.start();
                     } catch (InterruptedException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
@@ -185,11 +185,49 @@ public class App {
     }
 
     public static void main(String[] args) {
+        
+        
+        //PROGRAMA DE PRUEBA
+
+        /*
+        Resource cd = new Resource(1, "MKX-CD");
+        Resource samsung = new Resource(2, "Samsung Galaxy S7");
+        Resource mando = new Resource(3, "Dualshock PS4");
+
+        LinkedList<Resource> resMK = new LinkedList<>();
+        resMK.add(cd);
+        resMK.add(mando);
+
+        LinkedList<Resource> resAngryBirds = new LinkedList<>();
+        resAngryBirds.add(mando);
+
+        Process proc1 = new Process("Mortal Kombat X", 12, 0, resMK);
+        Process proc2 = new Process("Angry Birds", 6, 0, resAngryBirds);
+        
+        Scheduler prueba = new Scheduler("RR", 1);
+        prueba.addProcess(proc1);
+        prueba.addProcess(proc2);
+        prueba.addResource(cd);
+        prueba.addResource(samsung);
+        prueba.addResource(mando);
+        try {
+            prueba.start();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        */
+
+
+        //INTERFAZ DE USUARIO
+
+        
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 new App();
             }
         });
+        
     }
 }

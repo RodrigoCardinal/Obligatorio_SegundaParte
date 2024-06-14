@@ -40,7 +40,7 @@ public class ProcessTest {
         resources.add(resource);
         Process process = new Process("Test Process", 5, 0, resources);
         process.getResAvaliables().add(resource);
-        process.Run(3);
+        process.run(3);
         assertEquals(Status.READY, process.getStatus());
         assertEquals(2, process.getTimeRequired());
     }
@@ -50,7 +50,7 @@ public class ProcessTest {
         LinkedList<Resource> resources = new LinkedList<>();
         resources.add(new Resource(1, "Resource1"));
         Process process = new Process("Test Process", 5, 0, resources);
-        process.Run(3);
+        process.run(3);
         assertEquals(Status.BLOCKED, process.getStatus());
         assertEquals(5, process.getTimeRequired());
     }

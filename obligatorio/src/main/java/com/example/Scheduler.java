@@ -26,11 +26,11 @@ public class Scheduler implements IScheduler{
     }
 
     @Override
-    public void Start() throws InterruptedException{
+    public void start() throws InterruptedException{
         boolean areReadyProcesses = false;
         boolean allFinished = false;
         isActive = true;
-        System.out.println("Comenzó la ejecución del scheduler");
+        System.out.println("Comenzó la ejecución del scheduler \n\n");
 
         //Búcle Principal del Scheduler
         while(isActive)
@@ -55,10 +55,7 @@ public class Scheduler implements IScheduler{
             }
 
             //Despachar el siguiente proceso listo
-            DispatchNext();
-
-
-            
+            if(!dispatchNext()) isActive = false;
 
             
             //Muestra el estado actual del scheduler
@@ -80,29 +77,57 @@ public class Scheduler implements IScheduler{
             //Al final de la vuelta pongo en falso que hay procesos listos.
             areReadyProcesses = false;
         }
-        End();
+        end();
     }
 
-    private void showActualStatus() {
-        String blockedProcesses = "";
+    private void showActualStatus() 
+    {
+        StringBuilder blockedProcessesBuilder = new StringBuilder();
         for (Process process : blockedProcessesList) {
-            blockedProcesses += process.getName() + ", ";
+            blockedProcessesBuilder.append(process.getName()).append(", ");
         }
-
-        String resources = "";
+        String blockedProcesses = blockedProcessesBuilder.length() > 0 ? blockedProcessesBuilder.substring(0, blockedProcessesBuilder.length() - 2) : "";
+    
+        StringBuilder resourcesBuilder = new StringBuilder();
         for (Resource res : resourcesList) {
-            resources += res.getName() + ", ";
+            resourcesBuilder.append(String.format("%s (ID: %d, Dueño: %s)", res.getName(), res.getID(), res.getOwner() != null ? res.getOwner().getName() : "NINGUNO")).append(", ");
         }
-
-        String processes = "";
+        String resources = resourcesBuilder.length() > 0 ? resourcesBuilder.substring(0, resourcesBuilder.length() - 2) : "";
+    
+        StringBuilder processesBuilder = new StringBuilder();
         for (Process process : processesList) {
-            processes += process.getName() + ", ";
+            processesBuilder.append(String.format("%s (Tiempo requerido: %d, Contexto: %d, Estado: %s, Recursos Necesarios: %s)", 
+                                                  process.getName(), process.getTimeRequired(), process.getContext(), process.getStatus(), 
+                                                  getProcessResources(process))).append(", ");
         }
-
-        String name = runningProcess == null ? "NINGUNO" : runningProcess.getName(); 
-
-        System.out.println("ESTADO DEL SCHEDULER: \nProceso en Ejecución: " + name + " \nProcesos Bloqueados: " + blockedProcesses + " \nRecursos: " + resources + "\nProcesos: " + processes);
+        String processes = processesBuilder.length() > 0 ? processesBuilder.substring(0, processesBuilder.length() - 2) : "";
+    
+        String name = runningProcess == null ? "NINGUNO" : runningProcess.getName();
+    
+        System.out.printf(
+            "========================================\n" +
+            "          ESTADO DEL SCHEDULER          \n" +
+            "========================================\n" +
+            "Proceso en Ejecución: %s\n" +
+            "========================================\n" +
+            "Procesos Bloqueados: %s\n" +
+            "========================================\n" +
+            "Recursos: %s\n" +
+            "========================================\n" +
+            "Procesos: %s\n" +
+            "========================================\n\n",
+            name, blockedProcesses, resources, processes
+        );
     }
+    
+    private String getProcessResources(Process process) {
+        StringBuilder resourcesBuilder = new StringBuilder();
+        for (Resource res : process.getResNeeded()) {
+            resourcesBuilder.append(res.getName()).append(", ");
+        }
+        return resourcesBuilder.length() > 0 ? resourcesBuilder.substring(0, resourcesBuilder.length() - 2) : "";
+    }
+    
 
     private void checkBlockedProcesses() {
         for (Process process : blockedProcessesList) {
@@ -129,7 +154,7 @@ public class Scheduler implements IScheduler{
         {
             proc.setStatus(Status.READY);
             blockedProcessesList.remove(proc);
-            System.out.println("Se desbloqueó el proceso " + proc.getName() + " porque le dieron todos los recursos que precisaba.");
+            System.out.println("Se desbloqueó el proceso " + proc.getName() + " porque le dieron todos los recursos que precisaba. \n");
         }
         else
         {
@@ -142,106 +167,178 @@ public class Scheduler implements IScheduler{
     }
 
     @Override
-    public void End() {
-        System.out.println("Terminó la ejecución del scheduler");
+    public void end() {
+        System.out.println("Terminó la ejecución del scheduler \n\n");
     }
 
     @Override
-    public boolean DispatchNext() throws InterruptedException
+    public boolean dispatchNext() throws InterruptedException
     {   
         if(processesList.isEmpty())
         {
-            System.out.println("El Scheduler no puede hacer un despacho porque no tiene procesos.");
+            System.out.println("ERROR: El Scheduler no puede hacer un despacho porque no tiene procesos. \n\n");
             return false;
         }
         switch(schedullingPolicy)
         {
             case "RR":
-                RoundRobinDispatch();
+                roundRobinDispatch();
                 return true;
             case "FIFO":
                 FIFODispatch();
                 return true;
             default:
-                System.out.println("Política de Scheduling Inválida");
+                System.out.println("ERROR: Política de Scheduling Inválida \n\n");
                 return false;
         }
     }
 
-    public void RoundRobinDispatch() throws InterruptedException
+    public void roundRobinDispatch() throws InterruptedException
     {
-        Process next = processesList.getFirst();
         //Encuentra el primer proceso listo.
-        while(next.getStatus() != Status.READY)
-        {
-            RemoveProcess(next);
-            AddProcess(next);
-            next = processesList.getFirst();   
+
+        Process next = null;
+        for (Process process : processesList) {
+            if(process.getStatus() == Status.READY)
+            {
+                next = process;
+                break;
+            }
         }
 
-        RemoveProcess(next);
-        runningProcess = next;
-        next.Run(timeout);
-        runningProcess = null;
+        if(next == null)
+        {
+            System.out.println("ERROR: Se intentó despachar y el scheduler no tiene procesos listos. \n\n");
+            return;
+        }
+        else
+        {
+            removeProcess(next);
+            runningProcess = next;
+            next.run(timeout);
+            next.returnAllResources(this);
+            checkBlockedProcesses();
 
-        if (next.getStatus() == Status.BLOCKED) 
-        {
-            blockedProcessesList.add(next); // Lo pone en la lista de bloqueados si se bloqueó.
-            AddProcess(next);
-        } 
-        else if (next.getStatus() == Status.READY) 
-        {
-            AddProcess(next); // Si aún no terminó lo vuelve a poner en la fila.
+            if (next.getStatus() == Status.BLOCKED) 
+            {
+                blockedProcessesList.add(next); // Lo pone en la lista de bloqueados si se bloqueó.
+                addProcess(next);
+            } 
+            else if (next.getStatus() == Status.READY) 
+            {
+                addProcess(next); // Si aún no terminó lo vuelve a poner en la fila.
+            }
         }
     }
 
 
     public void FIFODispatch() throws InterruptedException
     {
-        Process next = processesList.getFirst();
         //Encuentra el primer proceso listo.
-        while(next.getStatus() != Status.READY)
-        {
-            RemoveProcess(next);
-            AddProcess(next);
-            next = processesList.getFirst();   
+
+        Process next = null;
+        for (Process process : processesList) {
+            if(process.getStatus() == Status.READY)
+            {
+                next = process;
+                break;
+            }
         }
 
-        RemoveProcess(next);
-        runningProcess = next;
-        next.Run(next.getTimeRequired());
-        runningProcess = null;
-
-        if (next.getStatus() == Status.BLOCKED) 
+        if(next == null)
         {
-            blockedProcessesList.add(next); // Lo pone en la lista de bloqueados si se bloqueó.
-            AddProcess(next);
-        } 
+            System.out.println("ERROR: Se intentó despachar y el scheduler no tiene procesos listos. \n\n");
+            return;
+        }
+        else
+        {
+            removeProcess(next);
+            runningProcess = next;
+            next.run(next.getTimeRequired());
+            runningProcess = null;
+
+            if (next.getStatus() == Status.BLOCKED) 
+            {
+                blockedProcessesList.add(next); // Lo pone en la lista de bloqueados si se bloqueó.
+                addProcess(next);
+            } 
+        }
     }
 
     @Override
-    public void AddProcess(Process proc) {
-        processesList.add(proc);
-    }
-
-    public void RemoveProcess(Process proc)
-    {
-        while(processesList.contains(proc))
+    public void addProcess(Process proc) {
+        if(!processesList.contains(proc))
         {
-            processesList.removeFirstOccurrence(proc);   
+            //Le intentá dar los recursos que precisa.
+            if(resourcesList.containsAll(proc.getResNeeded()))
+            {
+                for (Resource res : proc.getResNeeded()) {
+                    if(!proc.getResAvaliables().contains(res))
+                    {
+                        proc.getResAvaliables().add(res);
+                        resourcesList.remove(res);
+                    }
+                }
+
+
+            }
+
+
+
+
+            processesList.add(proc);
+            System.out.println("Se agregó el proceso " + proc.getName() + " al scheduler con éxito. \n\n");
+        }
+        else
+        {
+            System.out.println("No se pudo añadir el proceso " + proc.getName() + " porque ya estaba en el scheduler. \n\n");
         }
     }
 
-    public void addResource(Resource res)
+    public void removeProcess(Process proc)
     {
-        resourcesList.add(res);
+        if(processesList.removeFirstOccurrence(proc))
+        {
+            System.out.println("Se removió el proceso " + proc.getName() + " del scheduler \n\n");
+        }
+        else
+        {
+            System.out.println("El proceso " + proc.getName() + " no estaba en el scheduler \n\n");
+        } 
     }
 
-    public void RemoveResource(Resource res)
+    public void addResource(Resource resource)
     {
-        while(resourcesList.contains(res))
+        boolean puedeIngresar = true;
+        Resource resMismoID = null;
+        for (Resource res : resourcesList) {
+            if(resource.getID() == res.getID())
+            {
+                puedeIngresar = false;
+                resMismoID = res;
+            }
+        }
+        if(puedeIngresar)
         {
-            resourcesList.removeFirstOccurrence(res);   
+            resourcesList.add(resource);
+            System.out.println("Se agregó el recurso " + resource.getName() + " al scheduler con éxito. \n\n");
+        }
+        else
+        {
+            System.out.println("No se pudo añadir el recurso " + resource.getName() + " porque tiene el mismo ID que el recurso " + resMismoID.getName() + ". \n\n");
+        }
+        
+    }
+
+    public void removeResource(Resource res)
+    {
+        if(resourcesList.removeFirstOccurrence(res))
+        {
+            System.out.println("Se removió el recurso " + res.getName() + " del scheduler \n\n");
+        }
+        else
+        {
+            System.out.println("El recurso " + res.getName() + " no estaba en el scheduler \n\n");
         }
     }
 }

@@ -1,12 +1,8 @@
 package com.example;
 
 public interface IScheduler {
-
-    
-    public void Start() throws InterruptedException;
-    public void End();
-    public boolean DispatchNext() throws InterruptedException;
-    public void AddProcess(Process proc);
-
-
+    public void start() throws InterruptedException;
+    public void end();
+    public boolean dispatchNext() throws InterruptedException;
+    public void addProcess(Process proc);
 }

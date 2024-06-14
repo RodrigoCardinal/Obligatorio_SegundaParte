@@ -64,7 +64,7 @@ public class Process
         this.status = newStatus;
     }
 
-    public void Run(long seconds) throws InterruptedException{
+    public void run(long seconds) throws InterruptedException{
 
         //Revisa si tiene disponibles todos los recursos que necesita.
         if(resAvailables.containsAll(resNeeded))
@@ -74,11 +74,11 @@ public class Process
             //Comienza a ejecutar el proceso.
             status = Status.RUNNING;
             System.out.println("Comenzó a ejecutarse el proceso: " + name + ", su contexto actual es: " + Integer.toString(context) + " y para terminar aún le faltan " + timeRequired + " segundos.");
-            context = random.nextInt(100);
+            context = random.nextInt(1000000);
             if(timeRequired - seconds <= 0)
             {
                 //Transcurrió todo el tiempo que necesitaba el proceso, por lo que pasa a estar finalizado.
-                Wait(timeRequired);
+                execute(timeRequired);
                 System.out.println("El proceso " + name + " se ejecutó por " + timeRequired + " segundos y finalizó completamente, a continuación se retirará del scheduller.");
                 timeRequired = 0;
                 status = Status.FINISHED;
@@ -86,7 +86,7 @@ public class Process
             else
             {
                 //Transcurrió el tiempo designado por el scheduler pero aún no finalizó el proceso. (TIMEOUT)
-                Wait(seconds);
+                execute(seconds);
                 timeRequired -= seconds;
                 System.out.println("Se ejecutó el proceso: " + name + " durante " + seconds + " segundos, pero aún no finalizó, por lo que llegó al TIMEOUT, aún necesita ejecutar por " + timeRequired + " segundos para finalizar, por lo que volverá a la fila de procesos del scheduler,  su contexto actual es: " + Integer.toString(context) + ".");
                 status = Status.READY;
@@ -107,8 +107,22 @@ public class Process
         }
     }
 
-    public void Wait(long seconds) throws InterruptedException
+    public void execute(long seconds) throws InterruptedException
     {
         Thread.sleep(seconds*1000);
+    }
+
+    public void returnAllResources(Scheduler scheduler)
+    {
+        String returnedNames = "";
+        LinkedList<Resource> resReturned = new LinkedList<>();
+        for (Resource res : resAvailables) {
+            resReturned.add(res);
+            scheduler.resourcesList.add(res);
+            res.setOwner(null);
+            returnedNames += res.getName() + ", ";
+        }
+        resAvailables.removeAll(resReturned);
+        System.out.println("El proceso " + name + " devolvió los recursos: " + returnedNames);
     }
 }

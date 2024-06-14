@@ -18,7 +18,7 @@ public class SchedulerTest {
     public void testAddProcess() {
         Scheduler scheduler = new Scheduler("FIFO", 5);
         Process process = new Process("Test Process", 10, 0, new LinkedList<Resource>());
-        scheduler.AddProcess(process);
+        scheduler.addProcess(process);
         assertTrue(scheduler.processesList.contains(process));
     }
 
@@ -63,8 +63,8 @@ public class SchedulerTest {
         
         scheduler.addResource(resource1);
         scheduler.addResource(resource2);
-        scheduler.AddProcess(process1);
-        scheduler.AddProcess(process2);
+        scheduler.addProcess(process1);
+        scheduler.addProcess(process2);
         
         // Ensure the process1 has the resources available
         process1.getResAvaliables().add(resource1);
@@ -72,7 +72,7 @@ public class SchedulerTest {
         process1.setStatus(Status.READY);
         process2.setStatus(Status.READY);
         
-        scheduler.Start();
+        scheduler.start();
         
         assertEquals(Status.FINISHED, process1.getStatus());
         assertEquals(Status.FINISHED, process2.getStatus());
