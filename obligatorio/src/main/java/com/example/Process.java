@@ -25,6 +25,11 @@ public class Process
         return this.name;
     }
 
+    public void setName(String newName)
+    {
+        this.name = newName;
+    }
+
     public int getContext(){
         return this.context;
     }
@@ -60,29 +65,36 @@ public class Process
     }
 
     public void Run(long seconds) throws InterruptedException{
+
+        //Revisa si tiene disponibles todos los recursos que necesita.
         if(resAvailables.containsAll(resNeeded))
         {
             Random random = new Random();
+
+            //Comienza a ejecutar el proceso.
             status = Status.RUNNING;
-            System.out.println("Se está ejecutando el proceso: " + name + ", su contexto actual es: " + Integer.toString(context) + " y le faltan aproximadamente " + timeRequired + " segundos para terminar su ejecución.");
+            System.out.println("Comenzó a ejecutarse el proceso: " + name + ", su contexto actual es: " + Integer.toString(context) + " y para terminar aún le faltan " + timeRequired + " segundos.");
             context = random.nextInt(100);
             if(timeRequired - seconds <= 0)
             {
+                //Transcurrió todo el tiempo que necesitaba el proceso, por lo que pasa a estar finalizado.
                 Wait(timeRequired);
-                System.out.println("El proceso " + getName() + " se ejecutó por " + timeRequired + " segundos y finalizó completamente, a continuación se retirará del scheduller.");
+                System.out.println("El proceso " + name + " se ejecutó por " + timeRequired + " segundos y finalizó completamente, a continuación se retirará del scheduller.");
                 timeRequired = 0;
                 status = Status.FINISHED;
             }
             else
             {
+                //Transcurrió el tiempo designado por el scheduler pero aún no finalizó el proceso. (TIMEOUT)
                 Wait(seconds);
                 timeRequired -= seconds;
-                System.out.println("Terminó la ejecución de: " + name + ", su contexto actual es: " + Integer.toString(context) + " y ahora le faltan aproximadamente " + timeRequired + " segundos para terminar su ejecución.");
+                System.out.println("Se ejecutó el proceso: " + name + " durante " + seconds + " segundos, pero aún no finalizó, por lo que llegó al TIMEOUT, aún necesita ejecutar por " + timeRequired + " segundos para finalizar, por lo que volverá a la fila de procesos del scheduler,  su contexto actual es: " + Integer.toString(context) + ".");
                 status = Status.READY;
             }
         }
         else
         {
+            //Si no pudo ejecutar, se bloquea y muestra cuales recursos le faltaron.
             String resWaited = "";
             for (Resource resource : resNeeded) {
                 if(!resAvailables.contains(resource))
@@ -90,7 +102,7 @@ public class Process
                     resWaited += resource.getName() + ", ";
                 }
             }
-            System.out.println("Se bloqueo el proceso " + getName() + " porque le faltaban los siguientes recursos: " + resWaited);
+            System.out.println("Se bloqueo el proceso " + name + " porque le faltaban los siguientes recursos: " + resWaited);
             status = Status.BLOCKED;
         }
     }
