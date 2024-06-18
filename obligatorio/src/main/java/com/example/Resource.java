@@ -25,4 +25,9 @@ public class Resource {
         this.owner = owner;
     }
 
+    @Override
+    public String toString() {
+        return "Resource[ID=" + ID + ", Name=" + name + "]";
+    }
+
 }

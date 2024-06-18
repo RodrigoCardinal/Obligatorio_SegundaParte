@@ -59,6 +59,7 @@ public class App {
         JLabel processInitialContextLabel = new JLabel("Initial Context:");
         processInitialContextField = new JTextField();
         JLabel processResourcesLabel = new JLabel("Resources Needed (comma separated IDs):");
+
         processResourcesField = new JTextField();
         JButton addProcessButton = new JButton("Add Process");
 
@@ -73,8 +74,11 @@ public class App {
         processPanel.add(processInitialContextField);
         processPanel.add(processResourcesLabel);
         processPanel.add(processResourcesField);
+
         processPanel.add(addProcessButton);
         processPanel.add(new JScrollPane(processList));
+        
+
 
         frame.add(processPanel);
 
@@ -98,8 +102,9 @@ public class App {
 
         // Panel para iniciar el scheduler
         JPanel startPanel = new JPanel();
-        JButton startButton = new JButton("Start Scheduler");
+        final JButton startButton = new JButton("Start Scheduler");
         startPanel.add(startButton);
+        startButton.setEnabled(false); 
 
         frame.add(startPanel);
 
@@ -107,12 +112,17 @@ public class App {
         addResourceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int id = Integer.parseInt(resourceIdField.getText());
-                String name = resourceNameField.getText();
-                Resource resource = new Resource(id, name);
-                resourceListModel.addElement(resource);
-                if (scheduler != null) {
-                    scheduler.addResource(resource);
+                try {
+                    int id = Integer.parseInt(resourceIdField.getText());
+                    String name = resourceNameField.getText();
+                    Resource resource = new Resource(id, name);
+                    resourceListModel.addElement(resource);
+                    if (scheduler != null) {
+                        scheduler.addResource(resource);
+                    }
+                    
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "Resource ID must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -121,25 +131,32 @@ public class App {
         addProcessButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String name = processNameField.getText();
-                int timeRequired = Integer.parseInt(processTimeRequiredField.getText());
-                int initialContext = Integer.parseInt(processInitialContextField.getText());
-                String[] resourceIds = processResourcesField.getText().split(",");
-                LinkedList<Resource> resources = new LinkedList<>();
-                for (String idStr : resourceIds) {
-                    int id = Integer.parseInt(idStr.trim());
-                    for (int i = 0; i < resourceListModel.size(); i++) {
-                        Resource resource = resourceListModel.get(i);
-                        if (resource.getID() == id) {
-                            resources.add(resource);
-                            break;
+                try {
+                    String name = processNameField.getText();
+                    int timeRequired = Integer.parseInt(processTimeRequiredField.getText());
+                    int initialContext = Integer.parseInt(processInitialContextField.getText());
+                    LinkedList<Resource> resources = new LinkedList<>();
+                    if (!processResourcesField.getText().isEmpty()){
+                        String[] resourceIds = processResourcesField.getText().split(",");
+                        for (String idStr : resourceIds) {
+                            int id = Integer.parseInt(idStr.trim());
+                            for (int i = 0; i < resourceListModel.size(); i++) {
+                                Resource resource = resourceListModel.get(i);
+                                if (resource.getID() == id) {
+                                    resources.add(resource);
+                                    break;
+                                }
+                            }
                         }
                     }
-                }
-                Process process = new Process(name, timeRequired, initialContext, resources);
-                processListModel.addElement(process);
-                if (scheduler != null) {
-                    scheduler.addProcess(process);
+                    Process process = new Process(name, timeRequired, initialContext, resources);
+                    processListModel.addElement(process);
+                    if (scheduler != null) {
+                        scheduler.addProcess(process);
+                    }
+                    
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "Time Required, Initial Context and Resource IDs must be integers.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -148,18 +165,36 @@ public class App {
         configureSchedulerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String policy = schedulingPolicyField.getText();
-                int timeout = Integer.parseInt(initialTimeoutField.getText());
-                scheduler = new Scheduler(policy, timeout);
-                // Añadir los recursos existentes al scheduler
-                for (int i = 0; i < resourceListModel.size(); i++) {
-                    scheduler.addResource(resourceListModel.get(i));
+                try {
+                    String policy = schedulingPolicyField.getText();
+                    int timeout = Integer.parseInt(initialTimeoutField.getText());
+
+                    if (!policy.equals("FIFO") && !policy.equals("RR")) {
+                        JOptionPane.showMessageDialog(frame, "Invalid Scheduling Policy. Use FIFO or RR", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    //verificar que el timeout sea mayor a 0
+                    if (timeout <= 0) {
+                        JOptionPane.showMessageDialog(frame, "Timeout must be greater than 0.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    scheduler = new Scheduler(policy, timeout);
+                    // Añadir los recursos existentes al scheduler
+                    for (int i = 0; i < resourceListModel.size(); i++) {
+                        scheduler.addResource(resourceListModel.get(i));
+                    }
+                    // Añadir los procesos existentes al scheduler
+                    for (int i = 0; i < processListModel.size(); i++) {
+                        scheduler.addProcess(processListModel.get(i));
+                    }
+                    startButton.setEnabled(true);
+                    JOptionPane.showMessageDialog(frame, "Scheduler Configured!");
                 }
-                // Añadir los procesos existentes al scheduler
-                for (int i = 0; i < processListModel.size(); i++) {
-                    scheduler.addProcess(processListModel.get(i));
+                    
+                catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "Timeout must be an integer.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                JOptionPane.showMessageDialog(frame, "Scheduler Configured!");
             }
         });
 

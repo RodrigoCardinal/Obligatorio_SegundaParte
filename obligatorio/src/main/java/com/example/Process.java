@@ -125,4 +125,9 @@ public class Process
         resAvailables.removeAll(resReturned);
         System.out.println("El proceso " + name + " devolvió los recursos: " + returnedNames);
     }
+    @Override
+    public String toString()
+    {
+        return "Process[Name=" + name + ", TimeRequired=" + timeRequired + ", InitialContext=" + context + ", Resources=" + resNeeded + "]";
+    }
 }
