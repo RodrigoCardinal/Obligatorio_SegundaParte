@@ -3,6 +3,8 @@ package com.example;
 import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Test;
 
 public class ProcessTest {
@@ -32,6 +34,55 @@ public class ProcessTest {
         process.setStatus(Status.RUNNING);
         assertEquals(Status.RUNNING, process.getStatus());
     }
+        @Test
+    public void testSetOwner() {
+        Resource resource = new Resource(1, "Recurso1");
+        Process process = new Process("Proceso1", 10, 0, new LinkedList<Resource>());
+        
+        resource.setOwner(process);
+        assertEquals(process, resource.getOwner());
+
+        resource.setOwner(null);
+        assertNull(resource.getOwner());
+    }
+
+    @Test
+    public void testSetOwnerTwice() {
+        Resource resource = new Resource(1, "Recurso1");
+        Process process1 = new Process("Proceso1", 10, 0, new LinkedList<Resource>());
+        Process process2 = new Process("Proceso2", 5, 0, new LinkedList<Resource>());
+        
+        resource.setOwner(process1);
+        assertEquals(process1, resource.getOwner());
+
+        resource.setOwner(process2);
+        assertEquals(process2, resource.getOwner());
+    }
+    @Test
+    public void testProcessRun() throws InterruptedException {
+        LinkedList<Resource> resources = new LinkedList<>();
+        resources.add(new Resource(1, "Recurso1"));
+        Process process = new Process("Proceso1", 5, 0, resources);
+        process.getResAvaliables().addAll(resources);
+        
+        process.run(3);
+        assertEquals(2, process.getTimeRequired());
+        assertEquals(Status.READY, process.getStatus());
+
+        process.run(2);
+        assertEquals(0, process.getTimeRequired());
+        assertEquals(Status.FINISHED, process.getStatus());
+    }
+
+    @Test
+    public void testProcessBlocking() throws InterruptedException {
+        LinkedList<Resource> resources = new LinkedList<>();
+        resources.add(new Resource(1, "Recurso1"));
+        Process process = new Process("Proceso1", 5, 0, resources);
+
+        process.run(3);
+        assertEquals(Status.BLOCKED, process.getStatus());
+    }
 
     @Test
     public void testProcessRunWithResources() throws InterruptedException {
@@ -53,5 +104,29 @@ public class ProcessTest {
         process.run(3);
         assertEquals(Status.BLOCKED, process.getStatus());
         assertEquals(5, process.getTimeRequired());
+    }
+
+    @Test
+    public void testRunExactTimeRequired() throws InterruptedException {
+        LinkedList<Resource> resources = new LinkedList<>();
+        resources.add(new Resource(1, "Recurso1"));
+        Process process = new Process("Proceso1", 5, 0, resources);
+        process.getResAvaliables().addAll(resources);
+
+        process.run(5);
+        assertEquals(Status.FINISHED, process.getStatus());
+        assertEquals(0, process.getTimeRequired());
+    }
+
+    @Test
+    public void testRunWithMoreTimeThanRequired() throws InterruptedException {
+        LinkedList<Resource> resources = new LinkedList<>();
+        resources.add(new Resource(1, "Recurso1"));
+        Process process = new Process("Proceso1", 5, 0, resources);
+        process.getResAvaliables().addAll(resources);
+
+        process.run(10);
+        assertEquals(Status.FINISHED, process.getStatus());
+        assertEquals(0, process.getTimeRequired());
     }
 }

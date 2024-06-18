@@ -2,6 +2,8 @@ package com.example;
 
 import java.util.LinkedList;
 
+import com.example.Process;
+
 public class Scheduler implements IScheduler{
 
     boolean isActive;
@@ -255,6 +257,7 @@ public class Scheduler implements IScheduler{
             removeProcess(next);
             runningProcess = next;
             next.run(next.getTimeRequired());
+            next.returnAllResources(this); //Devuelve los recursos que tenía (agregue esto y creo q arregla el problema de los recursos que no se devuelven)
             runningProcess = null;
 
             if (next.getStatus() == Status.BLOCKED) 

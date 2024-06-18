@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.example.ProcessTest" time="18.074" tests="11" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.example.T2" time="3.034" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -16,9 +16,9 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Users\nanos\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.10.7-hotspot\bin"/>
-    <property name="sun.java.command" value="C:\Users\nanos\AppData\Local\Temp\surefire13361945078852901908\surefirebooter627755091880454868.jar C:\Users\nanos\AppData\Local\Temp\surefire13361945078852901908 2024-06-17T20-14-02_089-jvmRun1 surefire4241691717607234700tmp surefire_09142754926835135669tmp"/>
+    <property name="sun.java.command" value="C:\Users\nanos\AppData\Local\Temp\surefire6494980080696561806\surefirebooter16614455673319666398.jar C:\Users\nanos\AppData\Local\Temp\surefire6494980080696561806 2024-06-17T21-19-36_832-jvmRun1 surefire12211846074851167234tmp surefire_013748767275116558267tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="test" value="com.example.ProcessTest"/>
+    <property name="test" value="com.example.T2"/>
     <property name="surefire.test.class.path" value="C:\Users\nanos\Desktop\Sistemas Operativos\SO Obligatorio\Obligatorio_SegundaParte\obligatorio\target\test-classes;C:\Users\nanos\Desktop\Sistemas Operativos\SO Obligatorio\Obligatorio_SegundaParte\obligatorio\target\classes;C:\Users\nanos\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\nanos\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\nanos"/>
@@ -32,7 +32,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\nanos\AppData\Local\Temp\surefire13361945078852901908\surefirebooter627755091880454868.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\nanos\AppData\Local\Temp\surefire6494980080696561806\surefirebooter16614455673319666398.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.10+7"/>
@@ -61,15 +61,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testSetOwnerTwice" classname="com.example.ProcessTest" time="0.002"/>
-  <testcase name="testProcessStatus" classname="com.example.ProcessTest" time="0"/>
-  <testcase name="testProcessCreation" classname="com.example.ProcessTest" time="0"/>
-  <testcase name="testProcessContext" classname="com.example.ProcessTest" time="0"/>
-  <testcase name="testProcessRun" classname="com.example.ProcessTest" time="5.017"/>
-  <testcase name="testRunWithMoreTimeThanRequired" classname="com.example.ProcessTest" time="5.015"/>
-  <testcase name="testProcessRunWithoutResources" classname="com.example.ProcessTest" time="0"/>
-  <testcase name="testProcessBlocking" classname="com.example.ProcessTest" time="0"/>
-  <testcase name="testRunExactTimeRequired" classname="com.example.ProcessTest" time="5.002"/>
-  <testcase name="testProcessRunWithResources" classname="com.example.ProcessTest" time="3.005"/>
-  <testcase name="testSetOwner" classname="com.example.ProcessTest" time="0"/>
+  <testcase name="testExecutionWithNoResources" classname="com.example.T2" time="3.007"/>
 </testsuite>
