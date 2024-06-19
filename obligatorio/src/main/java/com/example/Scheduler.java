@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import com.example.Process;
 
-public class Scheduler implements IScheduler{
+public class Scheduler{
 
     boolean isActive;
     Process runningProcess;
@@ -15,6 +15,12 @@ public class Scheduler implements IScheduler{
     long timeout;
     int delayLoop;
 
+    /**
+     * Constructor para la clase Scheduler.
+     *
+     * @param schedullingPolicy la política de planificación que se utilizará (por ejemplo, "RR" para Round Robin, "FIFO" para First In First Out)
+     * @param initialTimeout    el tiempo de espera inicial en milisegundos
+     */
     public Scheduler(String schedullingPolicy, long initialTimeout)
     {
         this.isActive = false;
@@ -27,7 +33,11 @@ public class Scheduler implements IScheduler{
         this.delayLoop = 500;
     }
 
-    @Override
+    /**
+     * Inicia el scheduler.
+     *
+     * @throws InterruptedException si la ejecución del hilo es interrumpida
+     */
     public void start() throws InterruptedException{
         boolean areReadyProcesses = false;
         boolean allFinished = false;
@@ -53,7 +63,7 @@ public class Scheduler implements IScheduler{
             if(!areReadyProcesses)
             {
                 Thread.sleep(delayLoop);
-                continue;
+                break;
             }
 
             //Despachar el siguiente proceso listo
@@ -82,6 +92,9 @@ public class Scheduler implements IScheduler{
         end();
     }
 
+    /**
+     * Muestra el estado actual del scheduler.
+     */
     private void showActualStatus() 
     {
         StringBuilder blockedProcessesBuilder = new StringBuilder();
@@ -122,6 +135,12 @@ public class Scheduler implements IScheduler{
         );
     }
     
+    /**
+     * Obtiene los recursos necesarios para un proceso.
+     *
+     * @param process el proceso para el cual se obtienen los recursos
+     * @return una cadena que lista los recursos necesarios
+     */
     private String getProcessResources(Process process) {
         StringBuilder resourcesBuilder = new StringBuilder();
         for (Resource res : process.getResNeeded()) {
@@ -130,13 +149,20 @@ public class Scheduler implements IScheduler{
         return resourcesBuilder.length() > 0 ? resourcesBuilder.substring(0, resourcesBuilder.length() - 2) : "";
     }
     
-
+    /**
+     * Verifica los procesos bloqueados para intentar desbloquearlos.
+     */
     private void checkBlockedProcesses() {
         for (Process process : blockedProcessesList) {
             tryToUnlock(process);
         }        
     }
 
+    /**
+     * Intenta desbloquear un proceso.
+     *
+     * @param proc el proceso a desbloquear
+     */
     private void tryToUnlock(Process proc)
     {
         LinkedList<Resource> resGiven = new LinkedList<>(); //Guarda los recursos que le voy dando
@@ -168,12 +194,19 @@ public class Scheduler implements IScheduler{
         }
     }
 
-    @Override
+    /**
+     * Termina la ejecución del scheduler.
+     */
     public void end() {
         System.out.println("Terminó la ejecución del scheduler \n\n");
     }
 
-    @Override
+    /**
+     * Despacha el siguiente proceso según la política de planificación.
+     *
+     * @return true si el despacho se realizó con éxito, false si hubo un error
+     * @throws InterruptedException si la ejecución del hilo es interrumpida
+     */
     public boolean dispatchNext() throws InterruptedException
     {   
         if(processesList.isEmpty())
@@ -195,6 +228,11 @@ public class Scheduler implements IScheduler{
         }
     }
 
+    /**
+     * Realiza el despacho de procesos utilizando la política Round Robin.
+     *
+     * @throws InterruptedException si la ejecución del hilo es interrumpida
+     */
     public void roundRobinDispatch() throws InterruptedException
     {
         //Encuentra el primer proceso listo.
@@ -233,7 +271,11 @@ public class Scheduler implements IScheduler{
         }
     }
 
-
+    /**
+     * Realiza el despacho de procesos utilizando la política First In First Out (FIFO).
+     *
+     * @throws InterruptedException si la ejecución del hilo es interrumpida
+     */
     public void FIFODispatch() throws InterruptedException
     {
         //Encuentra el primer proceso listo.
@@ -268,7 +310,11 @@ public class Scheduler implements IScheduler{
         }
     }
 
-    @Override
+    /**
+     * Agrega un proceso al scheduler si este no estaba ya en él, y si el scheduler tiene los
+     * recursos que el proceso necesita, se los da.
+     * @param proc el proceso que se agregará al scheduler.
+     */
     public void addProcess(Process proc) {
         if(!processesList.contains(proc))
         {
@@ -298,6 +344,10 @@ public class Scheduler implements IScheduler{
         }
     }
 
+    /**
+     * Elimina un proceso del scheduler.
+     * @param proc el proceso a eliminar.
+     */
     public void removeProcess(Process proc)
     {
         if(processesList.removeFirstOccurrence(proc))
@@ -310,6 +360,10 @@ public class Scheduler implements IScheduler{
         } 
     }
 
+    /**
+     * Agrega un recurso al scheduler, si este no contenía ningun recurso con el mismo ID.
+     * @param resource el recurso que se agregará al scheduler.
+     */
     public void addResource(Resource resource)
     {
         boolean puedeIngresar = true;
@@ -333,6 +387,10 @@ public class Scheduler implements IScheduler{
         
     }
 
+    /**
+     * Elimina un recurso del scheduler.
+     * @param res el recurso a eliminar.
+     */
     public void removeResource(Resource res)
     {
         if(resourcesList.removeFirstOccurrence(res))

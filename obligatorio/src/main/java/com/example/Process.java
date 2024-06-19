@@ -12,6 +12,14 @@ public class Process
     private LinkedList<Resource> resAvailables;
     private Status status;
 
+    /**
+     * Constructor para la clase Process.
+     *
+     * @param name           el nombre del proceso
+     * @param timeRequired   el tiempo requerido para que el proceso se complete
+     * @param initialContext el contexto inicial del proceso
+     * @param resNeeded      la lista de recursos necesarios para el proceso
+     */
     public Process(String name, long timeRequired, int initialContext, LinkedList<Resource> resNeeded){   
         this.name = name;
         this.timeRequired = timeRequired;
@@ -21,49 +29,100 @@ public class Process
         this.status = Status.READY;
     }
 
+    /**
+     * Obtiene el nombre del proceso.
+     *
+     * @return el nombre del proceso
+     */
     public String getName(){
         return this.name;
     }
 
+    /**
+     * Establece un nuevo nombre para el proceso.
+     *
+     * @param newName el nuevo nombre del proceso
+     */
     public void setName(String newName)
     {
         this.name = newName;
     }
 
+    /**
+     * Obtiene el contexto del proceso.
+     *
+     * @return el contexto del proceso
+     */
     public int getContext(){
         return this.context;
     }
 
+    /**
+     * Establece un nuevo contexto para el proceso.
+     *
+     * @param newContext el nuevo contexto del proceso
+     */
     public void setContext(int newContext)
     {
         this.context = newContext;
     }
 
+    /**
+     * Obtiene el tiempo requerido para que el proceso se complete.
+     *
+     * @return el tiempo requerido
+     */
     public long getTimeRequired()
     {
         return this.timeRequired;
     }
 
+    /**
+     * Obtiene la lista de recursos necesarios para el proceso.
+     *
+     * @return la lista de recursos necesarios
+     */
     public LinkedList<Resource> getResNeeded()
     {
         return resNeeded;
     }
 
+     /**
+     * Obtiene la lista de recursos disponibles para el proceso.
+     *
+     * @return la lista de recursos disponibles
+     */
     public LinkedList<Resource> getResAvaliables()
     {
         return resAvailables;
     }
 
+    /**
+     * Obtiene el estado actual del proceso.
+     *
+     * @return el estado del proceso
+     */
     public Status getStatus()
     {
         return status;
     }
 
+     /**
+     * Establece un nuevo estado para el proceso.
+     *
+     * @param newStatus el nuevo estado del proceso
+     */
     public void setStatus(Status newStatus)
     {
         this.status = newStatus;
     }
 
+     /**
+     * Ejecuta el proceso durante un periodo de tiempo especificado.
+     *
+     * @param seconds el tiempo en segundos durante el cual se ejecutará el proceso
+     * @throws InterruptedException si la ejecución del hilo es interrumpida
+     */
     public void run(long seconds) throws InterruptedException{
 
         //Revisa si tiene disponibles todos los recursos que necesita.
@@ -107,11 +166,22 @@ public class Process
         }
     }
 
+    /**
+     * Simula la ejecución del proceso durante un tiempo especificado.
+     *
+     * @param seconds el tiempo en segundos durante el cual se simula la ejecución
+     * @throws InterruptedException si la ejecución del hilo es interrumpida
+     */
     public void execute(long seconds) throws InterruptedException
     {
         Thread.sleep(seconds*1000);
     }
 
+    /**
+     * Devuelve todos los recursos que el proceso tiene asignados al scheduler.
+     *
+     * @param scheduler el scheduler al que se devolverán los recursos
+     */
     public void returnAllResources(Scheduler scheduler)
     {
         String returnedNames = "";
